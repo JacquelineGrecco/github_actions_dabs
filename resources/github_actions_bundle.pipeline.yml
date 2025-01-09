@@ -1,0 +1,13 @@
+# The main pipeline for github_actions_bundle
+resources:
+  pipelines:
+    github_actions_bundle_pipeline:
+      name: github_actions_bundle_pipeline
+      catalog: jacqueline_grecco_adb_1119695353408652
+      target: github_actions_bundle_${bundle.target}
+      libraries:
+        - notebook:
+            path: ../src/dlt_pipeline.ipynb
+
+      configuration:
+        bundle.sourcePath: ${workspace.file_path}/src

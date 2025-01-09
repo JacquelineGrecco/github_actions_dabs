@@ -1,0 +1,44 @@
+name: Job orchestration - dev/prod
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    name: Deploy bundle
+    runs-on: ubuntu-latest
+
+
+    environment: prod
+    env:
+      DATABRICKS_HOST: ${{secrets.DATABRICKS_HOST}}
+      DATABRICKS_CLIENT_ID: ${{secrets.DATABRICKS_CLIENT_ID}}
+      DATABRICKS_CLIENT_SECRET: ${{secrets.DATABRICKS_CLIENT_SECRET}}
+
+    # Checkout code, setup databricks CLI and then, deploy the bundle using DABs
+    steps:
+      - uses: actions/checkout@v3
+      - uses: databricks/setup-cli@master
+
+      - run: databricks bundle deploy --target prod
+
+  pipeline_update:
+    name: Run pipeline update
+    runs-on: ubuntu-latest
+
+    # Run the "deploy" job before.
+    needs:
+      - deploy
+
+    environment: prod
+    env:
+      DATABRICKS_HOST: ${{secrets.DATABRICKS_HOST}}
+      DATABRICKS_CLIENT_ID: ${{secrets.DATABRICKS_CLIENT_ID}}
+      DATABRICKS_CLIENT_SECRET: ${{secrets.DATABRICKS_CLIENT_SECRET}}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: databricks/setup-cli@master
+      # - run: databricks bundle run awesome_job --target prod
+      # in here, we can run all the resources we defined on the databricks.yml
