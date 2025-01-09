@@ -19,7 +19,7 @@ jobs:
     # Checkout code, setup databricks CLI and then, deploy the bundle using DABs
     steps:
       - uses: actions/checkout@v3
-      - uses: databricks/setup-cli@master
+      - uses: databricks/setup-cli@main
 
       - run: databricks bundle deploy --target prod
 
@@ -39,6 +39,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: databricks/setup-cli@master
+      - uses: databricks/setup-cli@main
       # - run: databricks bundle run awesome_job --target prod
       # in here, we can run all the resources we defined on the databricks.yml
